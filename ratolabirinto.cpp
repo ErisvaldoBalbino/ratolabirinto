@@ -147,8 +147,8 @@ bool solveMaze(Stack& stack, int maze[4][4], int x, int y,int qx,int qy, int row
 //    findAndPushArray(stack, arr, x, sizeArr, index + 1);
 //};
 
-
-int main(){
+//TODO: visualizar caminho
+int main() {
     int maze[4][4] = {
         {1, 0, 0, 1},
         {1, 1, 0, 0},
@@ -158,14 +158,42 @@ int main(){
 
     Stack stack;
     std::string result;
+    int x = 0, y = 0;
+    int qx = 0, qy = 0;
 
-    if (solveMaze(stack, maze, 0, 0, 3, 0, 4, 4, result)){
+    //rato
+    while (true) {
+        std::cout << "Escolha a posicao do rato (x, y): ";
+        std::cin >> x >> y;
+        if (x >= 0 && x < 4 && y >= 0 && y < 4 && maze[x][y] == 1) {
+            break;
+        }
+        std::cerr << "essa posicao nao e valida" << std::endl;
+    }
+
+    // queijo
+    while (true) {
+        std::cout << "Escolha a posicao do queijo (x, y): ";
+        std::cin >> qx >> qy;
+        if (qx >= 0 && qx < 4 && qy >= 0 && qy < 4 && maze[qx][qy] == 1) {
+            if (qx == x && qy == y) {
+                std::cerr << "o rato esta na mesma posicao do queijo...";
+                return 0;
+            }
+            break;
+        }
+        std::cerr << "essa posicao nao e valida";
+    }
+
+    if (solveMaze(stack, maze, x, y, qx, qy, 4, 4, result)) {
         std::cout << "o rato encontrou o queijo" << std::endl;
+        // precisa inverter pq a funcao adiciona os caminhos
+        // ao contrario
         std::reverse(result.begin(), result.end());
-        std::cout << result << std::endl;
+        std::cout << "caminho: " << result << std::endl;
     } else {
-        std::cout << "nenhum caminho para o queijo encontrado";
+        std::cout << "nenhum caminho para o queijo encontrado" << std::endl;
     }
 
     return 0;
-};
+}
