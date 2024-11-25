@@ -61,11 +61,10 @@ public:
 
 };
 
+//TODO: adicionar os caracteres na ordem certa
 bool solveMaze(Stack& stack, int maze[4][4], int x, int y,int qx,int qy, int rows, int cols, std::string& result){
 
-    // o queijo esta numa posicao fixa nesse caso
-    // que e o final da matriz
-    // TODO: deixar o usuario escolher a posicao do queijo, e do rato
+    // agora o usuario pode escolher a posicao do queioj
     //std::cout << "x: " << x << ", y: " << y << " | qx: " << qx << ", qy: " << qy << std::endl;
     if (x == qx && y == qy)
     {
