@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <algorithm>
 
 class Node {
 public:
@@ -60,13 +61,13 @@ public:
 
 };
 
-// TODO: string com as direcoes
-bool solveMaze(Stack& stack, int maze[4][4], int x, int y, int rows, int cols){
+bool solveMaze(Stack& stack, int maze[4][4], int x, int y,int qx,int qy, int rows, int cols, std::string& result){
 
     // o queijo esta numa posicao fixa nesse caso
     // que e o final da matriz
     // TODO: deixar o usuario escolher a posicao do queijo, e do rato
-    if (x == rows - 1 && y == cols - 1)
+    //std::cout << "x: " << x << ", y: " << y << " | qx: " << qx << ", qy: " << qy << std::endl;
+    if (x == qx && y == qy)
     {
         stack.push(x, y);
         return true;
@@ -85,30 +86,30 @@ bool solveMaze(Stack& stack, int maze[4][4], int x, int y, int rows, int cols){
         stack.push(x, y);
 
         // direita
-        if (solveMaze(stack, maze, x, y + 1, rows, cols))
+        if (solveMaze(stack, maze, x, y + 1,qx,qy, rows, cols, result))
         {
-            //result += "D";
+            result += "D";
             return true;
         }
 
         // esquerda
-        if (solveMaze(stack, maze, x, y - 1, rows, cols))
+        if (solveMaze(stack, maze, x, y - 1,qx,qy, rows, cols, result))
         {
-            //result += "E";
+            result += "E";
             return true;
         }
 
         // cima
-        if (solveMaze(stack, maze, x - 1, y, rows, cols))
+        if (solveMaze(stack, maze, x - 1, y,qx,qy, rows, cols, result))
         {
-            //result += "C";
+            result += "C";
             return true;
         }
 
         // baixo
-        if (solveMaze(stack, maze, x + 1, y, rows, cols))
+        if (solveMaze(stack, maze, x + 1, y,qx,qy, rows, cols, result))
         {
-            //result += "B";
+            result += "B";
             return true;
         }
         
@@ -156,9 +157,12 @@ int main(){
     };
 
     Stack stack;
+    std::string result;
 
-    if (solveMaze(stack, maze, 0, 0, 4, 4)){
-        std::cout << "o rato encontrou o queijo";
+    if (solveMaze(stack, maze, 0, 0, 3, 0, 4, 4, result)){
+        std::cout << "o rato encontrou o queijo" << std::endl;
+        std::reverse(result.begin(), result.end());
+        std::cout << result << std::endl;
     } else {
         std::cout << "nenhum caminho para o queijo encontrado";
     }
