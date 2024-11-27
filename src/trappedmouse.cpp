@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <stack>
 
 class Stack {
     public:
@@ -68,6 +69,18 @@ class Cell {
             return x == outro.x && y == outro.y;
         }
 
+        bool operator!=(const Cell& outro) const {
+            return x != outro.x || y != outro.y;
+        }
+
+        int getX() const {
+            return x;
+        }
+
+        int getY() const {
+            return y;
+        }
+
         Cell(int x, int y) : x(x), y(y) {}
 };
 
@@ -86,7 +99,7 @@ class Maze {
         const char wall = '1';
 
         // pilha de cell
-        Stack mazeStack;
+        //Stack mazeStack;
 
         // Stack mazeRows;
         Stack mazeRows;
@@ -146,6 +159,72 @@ class Maze {
                 std::cout << maze[i] << std::endl;
             }
         }
+
+        bool exitMaze(Cell cell = Cell(1, 1)) {
+            // eu acho que tenho que usar aquela pilha privada
+            // mas nao sei como
+            std::stack<Cell> mazeStack;
+
+            // percorre o labirinto procurando a entrada e a saída
+            if (cell == Cell(1, 1)) {
+                // linha
+                for (int i = 0; i < maze.size(); i++) {
+                    // coluna
+                    for (int j = 0; j < maze[i].length(); j++) {
+                        if (maze[i][j] == entryMarker) {
+                            // seta a entrada como a cell atual
+                            entryCell = Cell(i, j);
+                            currentCell = entryCell;
+                        } else if (maze[i][j] == exitMarker) {
+                            // saida
+                            exitCell = Cell(i, j);
+                        }
+                    }
+                }
+            }
+
+            // enquanto currentCell nao for exitCell faca
+            while (currentCell != exitCell) {
+                // variaveis
+                int x = currentCell.getX();
+                int y = currentCell.getY();
+
+                // marca current cell como visitada
+                if (maze[x][y] != entryMarker && maze[x][y] != exitMarker) {
+                    maze[x][y] = visited;
+                }
+
+                // coloca os vizinhos na pilha
+                // ordem: direita, esquerda, baixo e cima
+                if (maze[x][y + 1] != wall && maze[x][y + 1] != visited) {
+                    mazeStack.push(Cell(x, y + 1));
+                }
+                if (maze[x][y - 1] != wall && maze[x][y - 1] != visited) {
+                    mazeStack.push(Cell(x, y - 1));
+                }
+                if (maze[x + 1][y] != wall && maze[x + 1][y] != visited) {
+                    mazeStack.push(Cell(x + 1, y));
+                }
+                if (maze[x - 1][y] != wall && maze[x - 1][y] != visited) {
+                    mazeStack.push(Cell(x - 1, y));
+                }
+
+                // se a pilha estiver vazia, caminho nao encontrado
+                if (mazeStack.empty()) {
+                    std::cout << "caminho nao encontrado" << std::endl;
+                    return false;
+                } else {
+                    // senao, atualiza a currentCell
+                    currentCell = mazeStack.top();
+                    mazeStack.pop();
+                }
+            }
+
+            // printa o labirinto
+            std::reverse(maze.begin(), maze.end());
+            printMaze();
+            return true;
+        }
 };
 
 int main() {
@@ -170,6 +249,8 @@ int main() {
 
     std::cout << "Labirinto: " << std::endl;
     maze.printMaze();
+    std::cout << "Labirinto resolvido: " << std::endl;
+    maze.exitMaze();
 
     return 0;
 }
