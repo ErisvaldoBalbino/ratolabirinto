@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <algorithm>
 
 class Stack {
     public:
@@ -107,9 +108,9 @@ class Maze {
         }
 
         void printMaze() {
-            // percorre o vetor de strings de tras para frente
-            // porque a primeira linha do labirinto e a ultima linha do vetor
-            for (int i = maze.size() - 1; i >= 0; i--) {
+            // melhor reverter do que percorrer de tras pra frente
+            std::reverse(maze.begin(), maze.end());
+            for (int i = 0; i < maze.size(); i++) {
                 std::cout << maze[i] << std::endl;
             }
         }
