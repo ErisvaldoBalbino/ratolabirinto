@@ -58,25 +58,57 @@ class Stack {
         }
 };
 
-class Maze {
+class Cell {
+    private:
+        int x;
+        int y;
+
     public:
+        bool operator==(const Cell& outro) const {
+            return x == outro.x && y == outro.y;
+        }
+
+        Cell(int x, int y) : x(x), y(y) {}
+};
+
+class Maze {
+    private:
+        // atributos 
+        Cell currentCell;
+        Cell exitCell;
+        Cell entryCell;
+
+        // constantes
+        const char exitMarker = 'e';
+        const char entryMarker = 'm';
+        const char visited = '.';
+        const char passage = '0';
+        const char wall = '1';
+
+        // pilha de cell
+        Stack mazeStack;
+
         // Stack mazeRows;
         Stack mazeRows;
 
         // Arrays de String maze;
         std::vector<std::string> maze;
 
+    public:
+        Maze() : currentCell(0, 0), exitCell(0, 0), entryCell(0, 0) {}
+
         void initMaze() {
             std::string line;
+
+            //TODO: aceitar apenas 1,0,e,m
             // enquanto houver linhas para serem lidas faça
-            // acho que esta funcionando :D
             while (std::getline(std::cin, line)) {
                 // se a linha estiver vazia, sai do loop
                 if (line.empty()) {
                     break;
                 }
                 // adicionar paredes nas extremidades;
-                line = "1" + line + "1";
+                line = wall + line + wall;
                 // fazer um push na pilha;
                 mazeRows.push(line);
             }
