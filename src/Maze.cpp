@@ -12,8 +12,8 @@ void Maze::initMaze(std::istream& input) {
     //TODO: aceitar apenas 1,0,e,m
     // enquanto houver linhas para serem lidas faça
     while (std::getline(input, line)) {
-        // se a linha for igual a "-" para o input
-        if (line == "-") {
+        // a linha vazia e melhor
+        if (line.empty()) {
             break;
         }
         // adicionar paredes nas extremidades;
@@ -107,7 +107,7 @@ bool Maze::exitMaze(Cell cell) {
 
         // se a pilha estiver vazia, caminho nao encontrado
         if (mazeStack.empty()) {
-            std::cout << "caminho nao encontrado" << std::endl;
+            std::cout << "Caminho nao encontrado" << std::endl;
             return false;
         } else {
             // senao, atualiza a currentCell
@@ -115,8 +115,8 @@ bool Maze::exitMaze(Cell cell) {
             mazeStack.pop();
         }
     }
-
         // printa o labirinto
+        std::cout << "Labirinto resolvido: " << std::endl;
         std::reverse(maze.begin(), maze.end());
         printMaze();
         return true;
