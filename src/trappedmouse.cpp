@@ -3,6 +3,8 @@
 #include <vector>
 #include <algorithm>
 #include <stack>
+#include <fstream>
+#include <istream>
 
 class Stack {
     public:
@@ -101,8 +103,6 @@ class Maze {
         // pilha de cell
         //Stack mazeStack;
 
-        // Stack mazeRows;
-        Stack mazeRows;
 
         // Arrays de String maze;
         std::vector<std::string> maze;
@@ -110,14 +110,19 @@ class Maze {
     public:
         Maze() : currentCell(0, 0), exitCell(0, 0), entryCell(0, 0) {}
 
-        void initMaze() {
+        Stack mazeRows;
+
+        // mudei o metodo
+        // agora ele recebe um istream
+        // pode ser cin ou um arquivo
+        void initMaze(std::istream& input) {
             std::string line;
 
             //TODO: aceitar apenas 1,0,e,m
             // enquanto houver linhas para serem lidas faça
-            while (std::getline(std::cin, line)) {
+            while (std::getline(input, line)) {
                 // se a linha estiver vazia, sai do loop
-                if (line.empty()) {
+                if (line == "-") {
                     break;
                 }
                 // adicionar paredes nas extremidades;
@@ -225,32 +230,54 @@ class Maze {
             printMaze();
             return true;
         }
+
+        void clear() {
+            // limpa o labirinto para ser resolvido novamente
+            maze.clear();
+        }
+
+        ~Maze() {
+            while (!mazeRows.isEmpty()) {
+                mazeRows.pop();
+            }
+        }
 };
 
 int main() {
     Maze maze;
-
     int inputType;
-
+    int mazeCounter = 1;
     std::cout << "Escolha o tipo de entrada: " << std::endl;
     std::cout << "1 - Arquivo" << std::endl;
     std::cout << "2 - Teclado" << std::endl;
-
     std::cin >> inputType;
     std::cin.ignore(); // limpa o buffer do teclado, para evitar ler o '\n'
-
+    
     if (inputType == 1) {
-        std::cout << "Arquivo..." << std::endl;
-        //TODO: implementar r  r rrrr r rrr :(
+        std::ifstream file("labirinto.txt"); // abre o arquivo
+        if (!file.is_open()) {
+            std::cerr << "Erro ao abrir o arquivo!" << std::endl;
+            return 1;
+        }
+    
+        std::cout << "Arquivo carregado..." << std::endl;
+        while (file.good()) // enquanto o arquivo estiver aberto
+        {
+            maze.initMaze(file); // passo o arquivo como argumento
+            // printa e resolve
+            std::cout << "Labirinto " << mazeCounter++ << std::endl;
+            maze.printMaze();
+            std::cout << "Labirinto resolvido: " << std::endl;
+            maze.exitMaze();
+            // limpa o labirinto
+            maze.clear();
+        }
+        
+        file.close(); // fecha o arquivo
     } else if (inputType == 2) {
         std::cout << "Digite as linhas do labirinto" << std::endl;
-        maze.initMaze();
+        maze.initMaze(std::cin); // passo o cin como argumento
     }
-
-    std::cout << "Labirinto: " << std::endl;
-    maze.printMaze();
-    std::cout << "Labirinto resolvido: " << std::endl;
-    maze.exitMaze();
 
     return 0;
 }
