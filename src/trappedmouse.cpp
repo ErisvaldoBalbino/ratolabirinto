@@ -121,7 +121,7 @@ class Maze {
             //TODO: aceitar apenas 1,0,e,m
             // enquanto houver linhas para serem lidas faça
             while (std::getline(input, line)) {
-                // se a linha estiver vazia, sai do loop
+                // se a linha for igual a "-" para o input
                 if (line == "-") {
                     break;
                 }
