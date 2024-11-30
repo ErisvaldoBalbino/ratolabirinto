@@ -74,7 +74,14 @@ void Maze::printMaze() {
     }
 }
 
+void Maze::resetCells() {
+    entryCell = Cell(-1, -1);
+    exitCell = Cell(-1, -1);
+    currentCell = Cell(-1, -1);
+}
+
 bool Maze::exitMaze(Cell cell) {
+    resetCells(); // reseta as celulas antes de resolver o labirinto
     // eu acho que tenho que usar aquela pilha privada
     // mas nao sei como
     std::stack<Cell> mazeStack;
@@ -94,6 +101,27 @@ bool Maze::exitMaze(Cell cell) {
                 }
             }
         }
+    }
+
+    if (entryCell == Cell(-1, -1) && exitCell == Cell(-1, -1)) {
+        std::cerr << "Labirinto sem entrada e saida." << std::endl;
+        return false;
+    }
+    
+    if (entryCell == Cell(-1, -1)) {
+        std::cerr << "Labirinto sem entrada." << std::endl;
+        return false;
+    }
+
+    if (exitCell == Cell(-1, -1)) {
+        std::cerr << "Labirinto sem saida." << std::endl;
+        return false;
+    }
+
+    // esse nem precisa
+    if (entryCell == exitCell) {
+        std::cerr << "Entrada e saida iguais." << std::endl;
+        return false;
     }
 
     // enquanto currentCell nao for exitCell faca
