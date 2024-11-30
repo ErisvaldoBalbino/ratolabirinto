@@ -23,11 +23,12 @@ class Maze {
         std::vector<std::string> maze;
 
     public:
-        Maze() : currentCell(0, 0), exitCell(0, 0), entryCell(0, 0) {};
+        Maze() : currentCell(-1, -1), exitCell(-1, -1), entryCell(-1, -1) {};
         Stack mazeRows;
 
         void initMaze(std::istream& input);
         void printMaze();
+        void resetCells();
         bool exitMaze(Cell cell = Cell(1, 1));
         void clear();
         ~Maze();
