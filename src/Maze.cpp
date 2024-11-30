@@ -8,14 +8,32 @@
 
 void Maze::initMaze(std::istream& input) {
     std::string line;
+    std::string invalidChar; // caracteres invalidos
 
-    //TODO: aceitar apenas 1,0,e,m
     // enquanto houver linhas para serem lidas faça
     while (std::getline(input, line)) {
         // a linha vazia e melhor
         if (line.empty()) {
             break;
         }
+
+        // verifica se a linha contem caracteres invalidos
+        invalidChar.clear(); // limpa antes pq pode ter caracteres invalidos de outra linha
+        // verifica se a linha contem caracteres invalidos
+        // se sim, adiciona na string invalidChar
+        for (char c : line) {
+            if (c != '0' && c != '1' && c != 'e' && c != 'm') {
+                invalidChar += c;
+            }
+        }
+
+        // se tiver algo na string
+        // printa os caracteres invalidos
+        if (!invalidChar.empty()) {
+            std::cerr << "Caracteres invalidos: " << invalidChar << std::endl;
+            continue;
+        }
+
         // adicionar paredes nas extremidades;
         line = wall + line + wall;
         // fazer um push na pilha;
