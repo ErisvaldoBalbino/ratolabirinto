@@ -5,6 +5,8 @@
 #include <string>
 #include <vector>
 #include <algorithm>
+#include <windows.h>
+#include <iterator>
 
 void Maze::initMaze(std::istream& input) {
     std::string line;
@@ -66,14 +68,16 @@ void Maze::initMaze(std::istream& input) {
     }
 }
 
+// mudei o metodo pq ele estava invertendo o vetor
+// e estava dando erro no exitMaze
 void Maze::printMaze() {
-    // melhor reverter do que percorrer de tras pra frente
-    std::reverse(maze.begin(), maze.end());
-    for (int i = 0; i < maze.size(); i++) {
-        std::cout << maze[i] << std::endl;
-    }
+    // mesma coisa que o reverse_copy
+    //std::copy(maze.rbegin(), maze.rend(), std::ostream_iterator<std::string>(std::cout, "\n"));
+    std::reverse_copy(maze.begin(), maze.end(), std::ostream_iterator<std::string>(std::cout, "\n"));
 }
 
+// criei esse metodo para resetar as celulas
+// antes de fazer as verificacoes
 void Maze::resetCells() {
     entryCell = Cell(-1, -1);
     exitCell = Cell(-1, -1);
@@ -126,7 +130,6 @@ bool Maze::exitMaze(Cell cell) {
 
     // enquanto currentCell nao for exitCell faca
     while (currentCell != exitCell) {
-
         // variaveis
         int x = currentCell.getX();
         int y = currentCell.getY();
@@ -160,10 +163,18 @@ bool Maze::exitMaze(Cell cell) {
             currentCell = mazeStack.top();
             mazeStack.pop();
         }
+
+        // animacao
+        // nao fica muito bom se forem varios labirintos
+        // depois vou colocar o numero do labirinto
+        // acima da animcao
+        system("cls"); // limpa a tela
+        printMaze(); // printa o labirinto
+        Sleep(500); // espera Xms, ainda nao defini exatamente quanto
+        
     }
         // printa o labirinto
         std::cout << "Labirinto resolvido: " << std::endl;
-        std::reverse(maze.begin(), maze.end());
         printMaze();
         return true;
 }
