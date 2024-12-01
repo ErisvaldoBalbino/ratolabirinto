@@ -1,6 +1,7 @@
 #include <iostream>
 #include <string>
 #include <fstream>
+#include <windows.h>
 #include "Stack.cpp"
 #include "Cell.cpp"
 #include "Maze.cpp"
@@ -11,6 +12,15 @@ void showMenu() {
     std::cout << "2 - Teclado" << std::endl;
     std::cout << "3 - Sair" << std::endl;
     std::cout << "Opcao: ";
+}
+
+void animateExit() {
+    std::cout << "Saindo";
+    for (int i = 0; i < 3; i++) {
+        Sleep(500);
+        std::cout << ".";
+    }
+    std::cout << std::endl;
 }
 
 int getInputType() {
@@ -43,7 +53,7 @@ void solveTXT(Maze& maze) {
         std::cout << "\nLabirinto " << mazeCounter++ << ":" << std::endl;
         maze.printMaze();
 
-        std::cout << "\nTentando resolver o labirinto..." << std::endl;
+        //std::cout << "\nTentando resolver o labirinto..." << std::endl;
 
         // os couts estao dentro do metodo
         maze.exitMaze();
@@ -61,7 +71,7 @@ void solveManual(Maze& maze) {
     std::cout << "\nLabirinto: " << std::endl;
     maze.printMaze();
 
-    std::cout << "\nTentando resolver o labirinto..." << std::endl;
+    //std::cout << "\nTentando resolver o labirinto..." << std::endl;
 
     maze.exitMaze();
 
@@ -80,7 +90,7 @@ int main() {
         } else if (inputType == 2) {
             solveManual(maze);
         } else if (inputType == 3) {
-            std::cout << "Saindo..." << std::endl;
+            animateExit();
             break;
         }
     }
